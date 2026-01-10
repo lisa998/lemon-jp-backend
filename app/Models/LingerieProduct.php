@@ -7,6 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -35,4 +36,13 @@ class LingerieProduct extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'product_code', 'description', 'detail'];
+
+    protected $casts = [
+        'detail' => 'array',
+    ];
+
+    public function skus():HasMany
+    {
+        return $this->hasMany(LingerieProductSku::class, 'lingerie_product_id');
+    }
 }
