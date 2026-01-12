@@ -58,37 +58,24 @@ class LingerieProductController extends Controller
     {
         $sizeInput = $request->query('size');
         $colorInput = $request->query('color');
-        $size = LingerieProductSize::where('size', $sizeInput)->first();
-        $color = LingerieProductColor::where('color', $colorInput)->first();
+        $sizeId = $sizeInput ? LingerieProductSize::where('size', $sizeInput)->value('id') : null;
+        $colorId = $colorInput ? LingerieProductColor::where('color', $colorInput)->value('id') : null;
 
-        if ($size === null && $sizeInput !== null) {
+        if ($sizeId === null && $sizeInput !== null) {
             return response()->json(['data' => []]);
         }
-        if ($color === null && $colorInput !== null) {
+        if ($colorId === null && $colorInput !== null) {
             return response()->json(['data' => []]);
         }
 
-        if ($size && $color) {
-            $sizeId = $size->id;
-            $colorId = $color->id;
-            $products = LingerieProduct::whereHas('skus', function ($query) use ($sizeId, $colorId) {
-                $query->where('size_id', $sizeId)
-                    ->where('color_id', $colorId);
-            })->get();
-            return response()->json(['data' => $products]);
-        }
+        $skuFilter = array_filter(
+            ['size_id' => $sizeId, 'color_id' => $colorId],
+            fn($value) => $value !== null
+        );
 
-        if ($size) {
-            $sizeId = $size->id;
-            $products = LingerieProduct::whereHas('skus', function ($query) use ($sizeId) {
-                $query->where('size_id', $sizeId);
-            })->get();
-            return response()->json(['data' => $products]);
-        }
-        if ($color) {
-            $colorId = $color->id;
-            $products = LingerieProduct::whereHas('skus', function ($query) use ($colorId) {
-                $query->where('color_id', $colorId);
+        if (!empty($skuFilter)) {
+            $products = LingerieProduct::whereHas('skus', function ($query) use ($skuFilter) {
+                $query->where($skuFilter);
             })->get();
             return response()->json(['data' => $products]);
         }
