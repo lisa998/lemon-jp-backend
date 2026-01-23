@@ -7,6 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -43,4 +44,18 @@ class LingerieProductSku extends Model
         'price',
         'stock_quantity'
     ];
+
+    protected $casts=[
+        'price' => 'decimal:2',
+    ];
+
+    public function size(): BelongsTo
+    {
+        return $this->belongsTo(LingerieProductSize::class, 'size_id');
+    }
+
+    public function color(): BelongsTo
+    {
+        return $this->belongsTo(LingerieProductColor::class, 'color_id');
+    }
 }

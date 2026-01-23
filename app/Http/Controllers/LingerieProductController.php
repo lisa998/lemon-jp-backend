@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\LingerieProductResource;
 use App\Models\LingerieProduct;
 use App\Models\LingerieProductColor;
 use App\Models\LingerieProductSize;
@@ -82,6 +83,13 @@ class LingerieProductController extends Controller
 
         $products = LingerieProduct::all();
         return response()->json(['data' => $products]);
+    }
+
+    public function getSkus(string $id)
+    {
+        $product = LingerieProduct::with(['skus.size', 'skus.color'])->findOrFail($id);
+
+        return new LingerieProductResource($product);
     }
 
 

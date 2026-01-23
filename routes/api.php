@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LingerieProductColorController;
 use App\Http\Controllers\LingerieProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,3 +16,13 @@ Route::put('/lingerie/products/{id}', [LingerieProductController::class, 'update
 Route::delete('/lingerie/products/{id}', [LingerieProductController::class, 'delete']);
 
 Route::get('/lingerie/products', [LingerieProductController::class, 'get']);
+
+Route::get('/lingerie/products/{id}', [LingerieProductController::class, 'getSkus']);
+
+Route::get('/lingerie/colors',[LingerieProductColorController::class, 'get']);
+
+Route::get('/lingerie/colors/{id}',[LingerieProductColorController::class, 'getById']);
+
+Route::post('/lingerie/colors',[LingerieProductColorController::class, 'create']);
+
+Route::put('/lingerie/colors/{id}',[LingerieProductColorController::class, 'update']);
