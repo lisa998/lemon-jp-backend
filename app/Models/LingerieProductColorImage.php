@@ -7,6 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -29,4 +30,9 @@ class LingerieProductColorImage extends Model
 
     public $timestamps = false;
     protected $fillable = ['product_id', 'color_id', 'image_url'];
+
+    public function color(): BelongsTo
+    {
+        return $this->belongsTo(LingerieProductColor::class, 'color_id');
+    }
 }
